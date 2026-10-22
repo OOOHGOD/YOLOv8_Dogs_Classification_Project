@@ -1,122 +1,62 @@
+**English** | [简体中文](README.zh-CN.md)
 
+# YOLOv8 Dog-Breed Detection Demo
 
-# YOLOv8犬类分类项目指南
-- **如果对你有帮助的话请在右上角↗️点个小小的start⭐谢谢😘💕**
-- 基于 YOLOv8 的犬类品种检测项目，使用哈佛大学狗狗数据集完成训练与验证。
+A coursework application for dog-breed recognition with a YOLOv8 detector, PyQt5 interface, and MySQL prediction history. Although the folder name uses “classification,” the checked-in workflow uses bounding-box labels and the detection API.
 
-## 环境准备
+**Category:** Artificial Intelligence · Computer Vision  
+**Stack:** Python · Ultralytics YOLOv8 · PyQt5 · PyMySQL · MySQL
 
-在运行程序前，请确保以下环境正确配置：
+## Repository guide
 
-- **操作系统**：Windows、Linux 或 macOS（推荐 Windows，含 PyQt5 GUI 界面）
-- **Python 版本**：Python 3.8+
-- **依赖库**：安装所需的 Python 第三方库
-- **数据库**：MySQL 数据库服务已安装并运行
-- **GPU 支持（可选）**：如需加速训练或推理，建议安装 CUDA 和 cuDNN，并确保 GPU 驱动正常
+Application files are inside **`YOLOv8 _Dogs_classification/`**. The space in this directory name matters.
 
-## 安装依赖库
+| File | Purpose |
+| --- | --- |
+| `dogs_windows.py` | Image upload, confidence controls, predictions, and history |
+| `training_model.py` | Training, validation, and experimental export calls |
+| `voc_to_yolo.py` | Annotation conversion and dataset preparation |
+| `download_models.py` | Pretrained-model download helper |
+| `dog_db.sql` | Database/table setup |
+| `YOLO_Dataset/data.yaml` | Paths and configured 23 dog-breed labels |
+| `trained_models/` | Saved experiment materials |
 
-在终端或命令行中运行以下命令安装依赖：
+## Setup and launch
 
-```bash
-# 基础环境
-pip install ultralytics pymysql PyQt5 requests torch torchvision
-
-# GPU 环境（可选）
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
-```
-
-## 下载预训练模型
-
-运行以下脚本下载预训练模型文件：
+Create and activate a virtual environment, then run:
 
 ```bash
-python download_models.py
+python -m pip install ultralytics pymysql PyQt5 requests torch torchvision
+cd "YOLOv8 _Dogs_classification"
 ```
 
-该脚本会将模型文件下载到 `./pre_trained_model` 目录中。
+Choose a compatible PyTorch/torchvision build for your hardware. Install/start MySQL, import `dog_db.sql`, and configure `get_db_connection()` in `dogs_windows.py` for your database account.
 
-## 准备数据集
-
-### 标注文件转换
-
-将 PASCAL VOC 格式的 XML 文件转换为 YOLO 格式。运行 `voc_to_yolo.py` 脚本完成转换：
-
-```bash
-python voc_to_yolo.py
-```
-
-确保输入目录 (`./VOC_Dataset`) 包含 XML 文件，输出目录 (`./YOLO_Dataset`) 将生成对应的 YOLO 格式标签文件。
-
-### 数据集配置
-
-编辑 `data.yaml` 文件，确保路径指向正确的训练集、验证集和测试集目录。例如：
-
-```yaml
-train: ./YOLO_Dataset/Train_YOLO/images
-val: ./YOLO_Dataset/Validation_YOLO/images
-test: ./YOLO_Dataset/Test_YOLO/images
-
-nc: 23  # 类别数量
-names: ['husky', 'beagle', 'chihuahua', ...]  # 类别名称
-```
-
-## 训练模型
-
-运行 `training_model.py` 脚本以训练模型：
-
-```bash
-python training_model.py
-```
-
-如果使用 GPU，请将 `device='cpu'` 修改为 `device='cuda'`。训练完成后，模型权重将保存到 `./trained_models` 目录中。
-
-## 配置 MySQL 数据库
-
-### 创建数据库
-
-使用 MySQL 客户端工具（如 Navicat 或 MySQL Workbench），执行 `dog_db.sql` 文件以创建数据库和表：
-
-```sql
-SOURCE G:/Couresware/DeepLearning_project/YOLOv8 _Dogs_Classification_Project/YOLOv8 _Dogs_classification/dog_db.sql;
-```
-
-### 修改数据库连接信息
-
-打开 `dogs_windows.py` 文件，检查 `get_db_connection` 函数中的数据库连接参数，确保与本地 MySQL 配置一致：
-
-```python
-pymysql.connect(
-    host='localhost',
-    user='root',
-    password='123456',
-    database='dog_db',
-    charset='utf8mb4',
-    cursorclass=pymysql.cursors.DictCursor
-)
-```
-
-## 启动 GUI 应用程序
-
-运行 `dogs_windows.py` 脚本以启动狗品种识别系统的图形界面：
+The GUI expects `trained_models/dog_classification_yolov8n-200epoch/weights/best.pt`. Verify the checkpoint and label mapping, then run from the application directory:
 
 ```bash
 python dogs_windows.py
 ```
 
-程序启动后，您可以上传图片进行检测，查看识别结果、历史记录等。
+## Reproduce training
 
-## 测试和验证
+1. Update the Colab-style dataset root in `YOLO_Dataset/data.yaml`.
+2. Update the absolute data path in `training_model.py` and verify pretrained weights.
+3. Review `classes=23`: this is a class-selection option in the detection API; the class count comes from dataset `nc`/`names`. Adapt it to your framework version.
+4. Review the sample test-image path and export calls before running the whole script.
 
-### 测试模型
-
-在训练完成后，使用 `model.val()` 和 `model.predict()` 方法对模型进行验证和测试。示例代码已在 `training_model.py` 中提供。
-
-### 导出模型
-
-如果需要将模型部署到其他平台，可以导出为 ONNX 或 PyTorch 格式：
-
-```python
-model.export(format='onnx', file='./exported_models/dog_classifier.onnx')
-model.export(format='pt', file='./exported_models/dog_classifier.pt')
+```bash
+python training_model.py
 ```
+
+The script currently selects CPU execution. Configure the device and converter paths for your environment.
+
+## Limitations
+
+This is a locally configured demo. Historical outputs do not establish reproduced accuracy. The former README's dataset attribution is not sufficient to establish provenance and redistribution rights for all images. Verify data/weight permissions separately; Ultralytics licensing is independent of the original-code license.
+
+## Author and license
+
+Author / maintainer: [https://github.com/OOOHGOD](https://github.com/OOOHGOD).
+
+Eligible original contributions are under the [MIT License](LICENSE), permitting commercial use and modification with preservation of copyright and license notices in copies or substantial portions. [License scope](LICENSE_SCOPE.md) explains third-party exclusions and upstream terms.
