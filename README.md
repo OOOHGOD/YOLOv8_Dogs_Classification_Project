@@ -1,11 +1,28 @@
-**English** | [简体中文](README.zh-CN.md)
+<div align="center">
 
-# YOLOv8 Dog-Breed Detection Demo
+# YOLOv8 Dog-Breed Detection
+
+Image detection, desktop interaction, and prediction history.
+
+**English** · [简体中文](README.zh-CN.md)
+
+![YOLOv8](https://img.shields.io/badge/YOLOv8-111827?style=flat-square) ![PyQt5](https://img.shields.io/badge/PyQt5-41CD52?style=flat-square) ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat-square) [![MIT License](https://img.shields.io/badge/License-MIT-2563EB?style=flat-square)](LICENSE)
+
+</div>
+
+<p align="center">
+<a href="#overview">Overview</a> · <a href="#setup-and-launch">Setup and launch</a> · <a href="#repository-guide">Repository guide</a> · <a href="#author--license">Author &amp; License</a>
+</p>
+
+---
+
+> **Project focus** · Coursework Demo
+
+
+## Overview
 
 A coursework application for dog-breed recognition with a YOLOv8 detector, PyQt5 interface, and MySQL prediction history. Although the folder name uses “classification,” the checked-in workflow uses bounding-box labels and the detection API.
 
-**Category:** Artificial Intelligence · Computer Vision  
-**Stack:** Python · Ultralytics YOLOv8 · PyQt5 · PyMySQL · MySQL
 
 ## Repository guide
 
@@ -55,8 +72,8 @@ The script currently selects CPU execution. Configure the device and converter p
 
 This is a locally configured demo. Historical outputs do not establish reproduced accuracy. The former README's dataset attribution is not sufficient to establish provenance and redistribution rights for all images. Verify data/weight permissions separately; Ultralytics licensing is independent of the original-code license.
 
-## Author and license
+## Author & License
 
-Author / maintainer: [https://github.com/OOOHGOD](https://github.com/OOOHGOD).
+Author / maintainer: [OOOHGOD](https://github.com/OOOHGOD) · Original contributions: [MIT License](LICENSE)
 
-Eligible original contributions are under the [MIT License](LICENSE), permitting commercial use and modification with preservation of copyright and license notices in copies or substantial portions. [License scope](LICENSE_SCOPE.md) explains third-party exclusions and upstream terms.
+Commercial use and modification are permitted with preservation of copyright and license notices in copies or substantial portions. Third-party code, datasets, models, and media retain their own terms; see [license scope](LICENSE_SCOPE.md).
